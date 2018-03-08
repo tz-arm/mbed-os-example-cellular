@@ -23,7 +23,7 @@ properties
 if (env.MBED_OS_REVISION == null) {
   echo 'First run in this branch, using default parameter values'
   env.MBED_OS_REVISION = ''
-  env.SMOKE_TEST = false
+  env.SMOKE_TEST = true
 }
 if (env.MBED_OS_REVISION == '') {
   echo 'Using mbed OS revision from mbed-os.lib'
@@ -92,7 +92,7 @@ for (int i = 0; i < target_families.size(); i++) {
 def parallelRunSmoke = [:]
 
 // Need to compare boolean against string value
-if (env.SMOKE_TEST == "true") {
+if (env.SMOKE_TEST == true) {
   echo "Running smoke tests"
   // Generate smoke tests based on suite amount
   for(int i = 0; i < raas.size(); i++) {
@@ -121,8 +121,8 @@ def buildStep(target_family, target, compilerLabel, toolchain, socket) {
       node ("${compilerLabel}") {
         deleteDir()
         dir("mbed-os-example-cellular") {
-          //checkout scm
-          //def config_file = "mbed_app.json"
+          checkout scm
+          def config_file = "mbed_app.json"
 
           // Activate traces
           //execute("sed -i 's/\"mbed-trace.enable\": false/\"mbed-trace.enable\": true/' ${config_file}")
@@ -130,26 +130,26 @@ def buildStep(target_family, target, compilerLabel, toolchain, socket) {
           //change socket typembed_app.json
 
 
-          //execute("sed -i 's/\"sock-type\": .*/\"sock-type\": \"${socket}\",/' ${config_file}")
+          execute("sed -i 's/\"sock-type\": .*/\"sock-type\": \"${socket}\",/' ${config_file}")
 
           // Set mbed-os to revision received as parameter
-          //execute ("mbed deploy --protocol ssh")
-          //if (env.MBED_OS_REVISION != '') {
-            //dir("mbed-os") {
-              //if (env.MBED_OS_REVISION.matches('pull/\\d+/head')) {
+          execute ("mbed deploy --protocol ssh")
+          if (env.MBED_OS_REVISION != '') {
+            dir("mbed-os") {
+              if (env.MBED_OS_REVISION.matches('pull/\\d+/head')) {
                 // Use mbed-os PR and switch to branch created
-                //execute("git fetch origin ${env.MBED_OS_REVISION}:_PR_")
-                //execute("git checkout _PR_")
-              //} else {
-                //execute ("git checkout ${env.MBED_OS_REVISION}")
-              //}
-            //}
-          //}
+                execute("git fetch origin ${env.MBED_OS_REVISION}:_PR_")
+                execute("git checkout _PR_")
+              } else {
+                execute ("git checkout ${env.MBED_OS_REVISION}")
+              }
+            }
+          }
 
-          //execute ("mbed compile --build out/${target}_${toolchain}/ -m ${target} -t ${toolchain} -c --app-config ${config_file}")
+          execute ("mbed compile --build out/${target}_${toolchain}/ -m ${target} -t ${toolchain} -c --app-config ${config_file}")
         }
-        //stash name: "${target}_${toolchain}_${socket}", includes: '**/mbed-os-example-cellular.bin'
-        //archive '**/mbed-os-example-cellular.bin'
+        stash name: "${target}_${toolchain}_${socket}", includes: '**/mbed-os-example-cellular.bin'
+        archive '**/mbed-os-example-cellular.bin'
         step([$class: 'WsCleanup'])
       }
     }
