@@ -20,9 +20,9 @@ properties
   ]
 ])
 
-if (!env.MBED_OS_REVISION) {
+if (env.MBED_OS_REVISION == null) {
   echo 'First run in this branch, using default parameter values'
-  env.MBED_OS_REVISION = ''
+  env.MBED_OS_REVISION = 'pull/6301/head'
   env.SMOKE_TEST = true
 }
 if (env.MBED_OS_REVISION == '') {
@@ -39,7 +39,7 @@ echo "Run smoke tests: ${env.SMOKE_TEST}"
 // Map RaaS instances to corresponding test suites
 def raas = [
   "cellular_smoke_ublox_c027.json": "8072"
-  //"cellular_smoke_mtb_mts_dragonfly.json": "8119"
+  "cellular_smoke_mtb_mts_dragonfly.json": "8119"
 ]
 
 // List of targets with supported modem families
