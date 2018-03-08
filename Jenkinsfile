@@ -23,7 +23,7 @@ properties
 if (env.MBED_OS_REVISION == null) {
   echo 'First run in this branch, using default parameter values'
   env.MBED_OS_REVISION = ''
-  env.SMOKE_TEST = true
+  env.SMOKE_TEST = false
 }
 if (env.MBED_OS_REVISION == '') {
   echo 'Using mbed OS revision from mbed-os.lib'
