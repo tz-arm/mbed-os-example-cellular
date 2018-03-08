@@ -13,7 +13,7 @@ properties
       [
         $class: 'BooleanParameterDefinition',
         name: 'smoke_test',
-        defaultValue: true,
+        defaultValue: false,
         description: 'Runs HW smoke tests on Cellular devices'
       ]
     ]
@@ -96,7 +96,7 @@ for (int i = 0; i < target_families.size(); i++) {
 def parallelRunSmoke = [:]
 
 // Need to compare boolean against string value
-if (env.SMOKE_TEST) {
+if (env.SMOKE_TEST == true) {
   // Generate smoke tests based on suite amount
   for(int i = 0; i < raas.size(); i++) {
   	for(int j = 0; j < sockets.size(); j++) {
