@@ -121,8 +121,8 @@ def buildStep(target_family, target, compilerLabel, toolchain, socket) {
       node ("${compilerLabel}") {
         deleteDir()
         dir("mbed-os-example-cellular") {
-          checkout scm
-          def config_file = "mbed_app.json"
+          //checkout scm
+          //def config_file = "mbed_app.json"
 
           // Activate traces
           //execute("sed -i 's/\"mbed-trace.enable\": false/\"mbed-trace.enable\": true/' ${config_file}")
