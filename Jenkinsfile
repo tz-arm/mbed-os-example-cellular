@@ -13,18 +13,17 @@ properties
       [
         $class: 'BooleanParameterDefinition',
         name: 'smoke_test',
-        defaultValue: false,
+        defaultValue: true,
         description: 'Runs HW smoke tests on Cellular devices'
       ]
     ]
   ]
 ])
 
-// Empty string != null
 if (env.MBED_OS_REVISION == null) {
   echo 'First run in this branch, using default parameter values'
   env.MBED_OS_REVISION = ''
-  env.SMOKE_TEST = false
+  env.SMOKE_TEST = true
 }
 if (env.MBED_OS_REVISION == '') {
   echo 'Using mbed OS revision from mbed-os.lib'
@@ -34,8 +33,6 @@ if (env.MBED_OS_REVISION == '') {
     echo "Revision is a Pull Request"
   }
 }
-
-echo "Run smoke tests: ${env.SMOKE_TEST}"
 
 // Map RaaS instances to corresponding test suites
 def raas = [
@@ -92,11 +89,10 @@ for (int i = 0; i < target_families.size(); i++) {
   }
 }
 
-
 def parallelRunSmoke = [:]
 
-// Need to compare boolean against string value
 if (env.SMOKE_TEST == true) {
+  echo "Running smoke tests"
   // Generate smoke tests based on suite amount
   for(int i = 0; i < raas.size(); i++) {
   	for(int j = 0; j < sockets.size(); j++) {
@@ -110,7 +106,7 @@ if (env.SMOKE_TEST == true) {
     }
   }
 } else {
-  echo "Smoke test value: ${env.SMOKE_TEST}"
+  echo "Skipping smoke tests"
 }
 
 timestamps {
