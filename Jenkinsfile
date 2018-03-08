@@ -23,7 +23,7 @@ properties
 if (env.MBED_OS_REVISION == null) {
   echo 'First run in this branch, using default parameter values'
   env.MBED_OS_REVISION = ''
-  env.SMOKE_TEST = true
+  //params.smoke_test = true
 }
 if (env.MBED_OS_REVISION == '') {
   echo 'Using mbed OS revision from mbed-os.lib'
@@ -92,7 +92,7 @@ for (int i = 0; i < target_families.size(); i++) {
 def parallelRunSmoke = [:]
 
 // Need to compare boolean against string value
-if (env.SMOKE_TEST == true) {
+if (params.smoke_test == true) {
   echo "Running smoke tests"
   // Generate smoke tests based on suite amount
   for(int i = 0; i < raas.size(); i++) {
