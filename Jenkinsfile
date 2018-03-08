@@ -20,21 +20,21 @@ properties
   ]
 ])
 
-if (!params.mbed_os_revision) {
+if (!env.MBED_OS_REVISION) {
   echo 'First run in this branch, using default parameter values'
-  params.mbed_os_revision = ''
-  params.smoke_test = true
+  env.MBED_OS_REVISION = ''
+  env.SMOKE_TEST = true
 }
-if (params.mbed_os_revision == '') {
+if (env.MBED_OS_REVISION == '') {
   echo 'Using mbed OS revision from mbed-os.lib'
 } else {
-  echo "Using given mbed OS revision: ${params.mbed_os_revision}"
-  if (params.mbed_os_revision.matches('pull/\\d+/head')) {
+  echo "Using given mbed OS revision: ${env.MBED_OS_REVISION}"
+  if (env.MBED_OS_REVISION.matches('pull/\\d+/head')) {
     echo "Revision is a Pull Request"
   }
 }
 
-echo "Run smoke tests: ${params.smoke_test}"
+echo "Run smoke tests: ${env.SMOKE_TEST}"
 
 // Map RaaS instances to corresponding test suites
 def raas = [
@@ -95,7 +95,7 @@ for (int i = 0; i < target_families.size(); i++) {
 def parallelRunSmoke = [:]
 
 // Need to compare boolean against string value
-if (params.smoke_test) {
+if (env.SMOKE_TEST) {
   // Generate smoke tests based on suite amount
   for(int i = 0; i < raas.size(); i++) {
   	for(int j = 0; j < sockets.size(); j++) {
@@ -109,7 +109,7 @@ if (params.smoke_test) {
     }
   }
 } else {
-  echo "Smoke test value: ${params.smoke_test}"
+  echo "Smoke test value: ${env.SMOKE_TEST}"
 }
 
 timestamps {
@@ -136,14 +136,14 @@ def buildStep(target_family, target, compilerLabel, toolchain, socket) {
 
           // Set mbed-os to revision received as parameter
           execute ("mbed deploy --protocol ssh")
-          if (params.mbed_os_revision != '') {
+          if (env.MBED_OS_REVISION != '') {
             dir("mbed-os") {
-              if (params.mbed_os_revision.matches('pull/\\d+/head')) {
+              if (env.MBED_OS_REVISION.matches('pull/\\d+/head')) {
                 // Use mbed-os PR and switch to branch created
-                execute("git fetch origin ${params.mbed_os_revision}:_PR_")
+                execute("git fetch origin ${env.MBED_OS_REVISION}:_PR_")
                 execute("git checkout _PR_")
               } else {
-                execute ("git checkout ${params.mbed_os_revision}")
+                execute ("git checkout ${env.MBED_OS_REVISION}")
               }
             }
           }
