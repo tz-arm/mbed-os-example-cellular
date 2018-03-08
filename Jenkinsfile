@@ -38,7 +38,7 @@ echo "Run smoke tests: ${env.SMOKE_TEST}"
 
 // Map RaaS instances to corresponding test suites
 def raas = [
-  "cellular_smoke_ublox_c027.json": "8072"
+  "cellular_smoke_ublox_c027.json": "8072",
   "cellular_smoke_mtb_mts_dragonfly.json": "8119"
 ]
 
