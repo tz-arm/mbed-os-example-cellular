@@ -91,7 +91,8 @@ for (int i = 0; i < target_families.size(); i++) {
 
 def parallelRunSmoke = [:]
 
-if (env.SMOKE_TEST == true) {
+// Need to compare boolean against string value
+if (env.SMOKE_TEST == "true") {
   echo "Running smoke tests"
   // Generate smoke tests based on suite amount
   for(int i = 0; i < raas.size(); i++) {
