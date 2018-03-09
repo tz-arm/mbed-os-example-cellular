@@ -1,24 +1,7 @@
-properties
-([
-  [
-    $class: 'ParametersDefinitionProperty',
-    parameterDefinitions:
-    [
-      [
-        $class: 'StringParameterDefinition',
-        name: 'mbed_os_revision',
-        defaultValue: '',
-        description: 'Revision of mbed-os to build. To access mbed-os PR use format "pull/PR number/head"'
-      ],
-      [
-        $class: 'BooleanParameterDefinition',
-        name: 'smoke_test',
-        defaultValue: true,
-        description: 'Runs HW smoke tests on Cellular devices'
-      ]
-    ]
-  ]
-])
+properties ([[$class: 'ParametersDefinitionProperty', parameterDefinitions: [
+  [$class: 'StringParameterDefinition', name: 'mbed_os_revision', defaultValue: '', description: 'Revision of mbed-os to build. To access mbed-os PR use format "pull/PR number/head"'],
+  [$class: 'BooleanParameterDefinition', name: 'smoke_test', defaultValue: true, description: 'Runs HW smoke tests on Cellular devices']
+]]])
 
 if (env.MBED_OS_REVISION == null) {
   echo 'First run in this branch, using default parameter values'
