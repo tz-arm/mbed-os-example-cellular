@@ -1,4 +1,10 @@
 {
+    "macros":
+    [
+        "CELLULAR_DEVICE=QUECTEL_M26",
+        "MDMRXD=D0",
+        "MDMTXD=D1"
+    ],
     "config": {
         "sock-type": "TCP",
         "sim-pin-code": {
@@ -7,7 +13,7 @@
         },
         "apn": {
             "help": "The APN string to use for this SIM/network, set to 0 if none",
-            "value": "\"internet\""
+            "value": "\"UNINET\""
         },
         "username": {
             "help": "The user name string to use for this APN, set to zero if none",
@@ -34,16 +40,16 @@
     "target_overrides": {
         "*": {
             "target.features_add": ["LWIP"],
-            "mbed-trace.enable": false,
+            "mbed-trace.enable": true,
             "lwip.ipv4-enabled": true,
             "lwip.ethernet-enabled": false,
-            "lwip.ppp-enabled": true,
+            "lwip.ppp-enabled": false,
             "lwip.tcp-enabled": true,
             "platform.stdio-convert-newlines": true,
             "platform.stdio-baud-rate": 115200,
             "platform.default-serial-baud-rate": 115200,
             "platform.stdio-buffered-serial": true,
-            "cellular.debug-at": false
+            "cellular.debug-at": true
         }
     }
 }

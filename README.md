@@ -2,26 +2,15 @@
 
 This is an example based on `mbed-os` cellular APIs that demonstrates a TCP or UDP echo transaction with a public echo server.
 
-## Getting started
-
-This particular cellular application uses a cellular network and network-socket APIs that are part of [`mbed-os`](https://github.com/ARMmbed/mbed-os).
-
-The program uses a [generic cellular modem driver](https://github.com/ARMmbed/mbed-os/tree/master/features/netsocket/cellular/generic_modem_driver) using an external IP stack (LWIP) standard 3GPP AT 27.007 AT commands to setup the cellular modem and registers to the network.
-
-After registration, the driver opens a point-to-point protocol (PPP) pipe using LWIP with the cellular modem and connects to internet. This driver currently supports UART data connection type only between your cellular modem and MCU.
-
-For more information on Arm Mbed OS cellular APIs and porting guide, please visit the [Mbed OS cellular API](https://os.mbed.com/docs/latest/reference/cellular-api.html) and [contributing documentation](https://os.mbed.com/docs/latest/reference/contributing-connectivity.html#cellularinterface).
+## Echo Test via Quectel M26 module
 
 ### Download the application
 
 ```sh
-$ mbed import mbed-os-example-cellular
+$ git clone git@github.com:tz-arm/mbed-os-example-cellular.git
 $ cd mbed-os-example-cellular
-
-#OR
-
-$ git clone git@github.com:ARMmbed/mbed-os-example-cellular.git
-$ cd mbed-os-example-cellular
+$ git checkout porting_quectel_m26
+$ mbed deploy .
 ```
 
 ### Change the network and SIM credentials
@@ -35,7 +24,7 @@ See the file `mbed_app.json` in the root directory of your application. This fil
         },
         "apn": {
             "help": "The APN string to use for this SIM/network, set to 0 if none",
-            "value": "\"internet\""
+            "value": "\"UNINET\""
         },
         "username": {
             "help": "The user name string to use for this APN, set to zero if none",
@@ -90,10 +79,9 @@ After you have defined `mbed-trace.enable: true`, you can set trace levels by ch
 
 The [generic cellular modem driver](https://github.com/ARMmbed/mbed-os/tree/master/features/netsocket/cellular/generic_modem_driver) this application uses was written using only a standard AT command set. It uses PPP with an Mbed-supported external IP stack. These abilities make the driver essentially generic, or nonvendor specific. However, this particular driver is for onboard-modem types. In other words, the modem exists on the Mbed Enabled target as opposed to plug-in modules (shields). For more details, please see our [Mbed OS cellular documentation](https://os.mbed.com/docs/latest/reference/cellular-api.html).
 
-Currently supported boards with onboard modem chips are:
+Currently we are using AT CMD mode via Uart to control the module:
 
-[u-blox C027](https://os.mbed.com/platforms/u-blox-C027/)  
-[MultiTech MTS Dragonfly](https://os.mbed.com/platforms/MTS-Dragonfly/)
+The hardware and connections: [confluence](https://confluence.arm.com/display/IoTBU/Module+-+Quectel+M26+2G+Module+Integration)
 
 
 ## Compiling the application
@@ -101,7 +89,7 @@ Currently supported boards with onboard modem chips are:
 Use Mbed CLI commands to generate a binary for the application. For example, in the case of GCC, use the following command:
 
 ```sh
-$ mbed compile -m YOUR_TARGET_WITH_MODEM -t GCC_ARM
+$ mbed compile -m K64F -t GCC_ARM
 ```
 
 ## Running the application

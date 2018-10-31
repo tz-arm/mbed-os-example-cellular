@@ -126,15 +126,16 @@ nsapi_error_t do_connect()
     uint8_t retry_counter = 0;
 
     while (!iface->is_connected()) {
+        print_function("\n############################ RETRY = %d\n",retry_counter);
         retcode = iface->connect();
         if (retcode == NSAPI_ERROR_AUTH_FAILURE) {
-            print_function("\n\nAuthentication Failure. Exiting application\n");
+            print_function("\n\n #### Authentication Failure. Exiting application\n");
         } else if (retcode == NSAPI_ERROR_OK) {
-            print_function("\n\nConnection Established.\n");
+            print_function("\n\n #### Connection Established.\n");
         } else if (retry_counter > RETRY_COUNT) {
-            print_function("\n\nFatal connection failure: %d\n", retcode);
+            print_function("\n\n #### Fatal connection failure: %d\n", retcode);
         } else {
-            print_function("\n\nCouldn't connect: %d, will retry\n", retcode);
+            print_function("\n\n #### Couldn't connect: %d, will retry\n", retcode);
             retry_counter++;
             continue;
         }
@@ -152,7 +153,9 @@ nsapi_error_t test_send_recv()
     nsapi_size_or_error_t retcode;
 #if MBED_CONF_APP_SOCK_TYPE == TCP
     TCPSocket sock;
+    print_function("\n############################ sock.open tcp ###");
 #else
+    print_function("\n############################ sock.open udp ###");
     UDPSocket sock;
 #endif
 
@@ -162,6 +165,8 @@ nsapi_error_t test_send_recv()
         return -1;
     }
 
+    print_function("\n############################ host_name %s ###", host_name);
+
     SocketAddress sock_addr;
     retcode = iface->gethostbyname(host_name, &sock_addr);
     if (retcode != NSAPI_ERROR_OK) {
@@ -169,13 +174,16 @@ nsapi_error_t test_send_recv()
         return -1;
     }
 
+    print_function("\n############################ sock_addr %s ###",sock_addr.get_ip_address());
+
     sock_addr.set_port(port);
 
-    sock.set_timeout(15000);
+    sock.set_timeout(5000);
     int n = 0;
     const char *echo_string = "TEST";
     char recv_buf[4];
 #if MBED_CONF_APP_SOCK_TYPE == TCP
+    print_function("\n\n#####TCP####################### sock.connect");
     retcode = sock.connect(sock_addr);
     if (retcode < 0) {
         print_function("TCPSocket.connect() fails, code: %d\n", retcode);
@@ -183,17 +191,23 @@ nsapi_error_t test_send_recv()
     } else {
         print_function("TCP: connected with %s server\n", host_name);
     }
-    retcode = sock.send((void*) echo_string, sizeof(echo_string));
-    if (retcode < 0) {
-        print_function("TCPSocket.send() fails, code: %d\n", retcode);
-        return -1;
-    } else {
-        print_function("TCP: Sent %d Bytes to %s\n", retcode, host_name);
+    while(1){
+        print_function("\n\n#####TCP####################### sock.send");
+        retcode = sock.send((void*) echo_string, sizeof(echo_string));
+        if (retcode < 0) {
+            print_function("TCPSocket.send() fails, code: %d\n", retcode);
+            return -1;
+        } else {
+            print_function("TCP: Sent %d Bytes to %s\n", retcode, host_name);
+        }
+
+        n = sock.recv((void*) recv_buf, sizeof(recv_buf));
+        print_function("####TCP######################## recv_buf =  %s, len = %d\n\n",recv_buf,n);
+
+        wait(2);
     }
-
-    n = sock.recv((void*) recv_buf, sizeof(recv_buf));
 #else
-
+    print_function("\n############################ sock.sendto");
     retcode = sock.sendto(sock_addr, (void*) echo_string, sizeof(echo_string));
     if (retcode < 0) {
         print_function("UDPSocket.sendto() fails, code: %d\n", retcode);
@@ -218,7 +232,7 @@ nsapi_error_t test_send_recv()
 int main()
 {
     print_function("\n\nmbed-os-example-cellular\n");
-    print_function("Establishing connection\n");
+    print_function("###################### Establishing connection\n");
 #if MBED_CONF_MBED_TRACE_ENABLE
     trace_open();
 #else
