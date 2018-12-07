@@ -152,11 +152,14 @@ nsapi_error_t test_send_recv()
     }
 
     SocketAddress sock_addr;
+    /*
     retcode = iface->gethostbyname(host_name, &sock_addr);
     if (retcode != NSAPI_ERROR_OK) {
         print_function("Couldn't resolve remote host: %s, code: %d\n", host_name, retcode);
         return -1;
     }
+    */
+    sock_addr.set_ip_address("52.215.34.155");
 
     sock_addr.set_port(port);
 
@@ -182,7 +185,6 @@ nsapi_error_t test_send_recv()
 
     n = sock.recv((void*) recv_buf, sizeof(recv_buf));
 #else
-
     retcode = sock.sendto(sock_addr, (void*) echo_string, sizeof(echo_string));
     if (retcode < 0) {
         print_function("UDPSocket.sendto() fails, code: %d\n", retcode);

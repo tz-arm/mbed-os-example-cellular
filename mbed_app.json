@@ -1,4 +1,12 @@
 {
+    "macros":
+    [
+        "CELLULAR_DEVICE=QUECTEL_BC95",
+        "MDMRXD=D0",
+        "MDMTXD=D1",
+        "MDMCTS=NC",
+        "MDMRTS=NC"
+    ],
     "config": {
         "sock-type": "TCP",
         "echo-server-hostname": {
@@ -14,23 +22,23 @@
             "macro_name": "MBED_TRACE_MAX_LEVEL",
             "value": "TRACE_LEVEL_INFO"
         }
-  },
+    },
     "target_overrides": {
         "*": {
             "target.network-default-interface-type": "CELLULAR",
-            "mbed-trace.enable": false,
+            "mbed-trace.enable": true,
             "lwip.ipv4-enabled": true,
             "lwip.ethernet-enabled": false,
-            "lwip.ppp-enabled": true,
+            "lwip.ppp-enabled": false,
             "lwip.tcp-enabled": true,
             "platform.stdio-convert-newlines": true,
             "platform.stdio-baud-rate": 115200,
-            "platform.default-serial-baud-rate": 115200,
+            "platform.default-serial-baud-rate": 9600,
             "platform.stdio-buffered-serial": true,
-            "cellular.debug-at": false,
+            "cellular.debug-at": true,
             "nsapi.default-cellular-plmn": 0,
             "nsapi.default-cellular-sim-pin": "\"1234\"",
-            "nsapi.default-cellular-apn": 0,
+            "nsapi.default-cellular-apn": "\"ctnb\"",
             "nsapi.default-cellular-username": 0,
             "nsapi.default-cellular-password": 0
         }
