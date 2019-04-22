@@ -172,6 +172,9 @@ nsapi_error_t test_send_recv()
     } else {
         print_function("TCP: connected with %s server\n", host_name);
     }
+
+while(1){
+
     retcode = sock.send((void*) echo_string, sizeof(echo_string));
     if (retcode < 0) {
         print_function("TCPSocket.send() fails, code: %d\n", retcode);
@@ -180,7 +183,17 @@ nsapi_error_t test_send_recv()
         print_function("TCP: Sent %d Bytes to %s\n", retcode, host_name);
     }
 
+    memset(recv_buf,0,sizeof(recv_buf));
     n = sock.recv((void*) recv_buf, sizeof(recv_buf));
+
+    if (n > 0) {
+        print_function("Received from echo server %d Bytes: %s \n", n, recv_buf);
+    }
+
+    wait(2);
+
+}
+
 #else
 
     retcode = sock.sendto(sock_addr, (void*) echo_string, sizeof(echo_string));
