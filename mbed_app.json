@@ -3,7 +3,7 @@
         "sock-type": "TCP",
         "echo-server-hostname": {
             "help": "Echo server host name.",
-            "value": "\"echo.mbedcloudtesting.com\""
+            "value": "\"52.215.34.155\""
         },
         "echo-server-port": {
             "help": "Echo server port number.",
@@ -18,21 +18,25 @@
     "target_overrides": {
         "*": {
             "target.network-default-interface-type": "CELLULAR",
-            "mbed-trace.enable": false,
+            "mbed-trace.enable": true,
             "lwip.ipv4-enabled": true,
             "lwip.ethernet-enabled": false,
-            "lwip.ppp-enabled": true,
+            "lwip.ppp-enabled": false,
             "lwip.tcp-enabled": true,
             "platform.stdio-convert-newlines": true,
             "platform.stdio-baud-rate": 115200,
             "platform.default-serial-baud-rate": 115200,
-            "platform.stdio-buffered-serial": true,
-            "cellular.debug-at": false,
+            "platform.stdio-buffered-serial": false,
+            "cellular.debug-at": true,
             "nsapi.default-cellular-plmn": 0,
             "nsapi.default-cellular-sim-pin": "\"1234\"",
-            "nsapi.default-cellular-apn": 0,
+            "nsapi.default-cellular-apn": "\"cmnet\"",
             "nsapi.default-cellular-username": 0,
-            "nsapi.default-cellular-password": 0
+            "nsapi.default-cellular-password": 0,
+            "QUECTEL_BC95.tx"                        : "D1",
+            "QUECTEL_BC95.rx"                        : "D0",
+            "QUECTEL_BC95.baudrate"                  : 115200,
+            "QUECTEL_BC95.provide-default"           : true
         }
     }
 }
